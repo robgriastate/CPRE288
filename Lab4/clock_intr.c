@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include "driverlib/interrupt.h"
 
-int i=12,j=58,k=55;
+int i=11 + 300,j=59 + 300,k=55 + 300;
 
 //#warning "TIMER4A_PRESCALER may not be defined correctly" // delete this line after defining TIMER4A_PRESCALER
 //#warning "TIMER4B_PRESCALER may not be defined correctly" // delete this line after defining TIMER4B_PRESCALER
@@ -27,6 +27,11 @@ void TIMER4A_Handler(void)
 {
 	TIMER4_ICR_R = TIMER_ICR_TATOCINT; //clear the TIMER4A timeout interrupt flag (page 754 of datasheet)
 	k++;
+	if((k % 60) == 0){
+	    j++;
+	if((j % 60) == 0)
+	    i++;
+	}
 }
 
 /**
@@ -37,14 +42,15 @@ void TIMER4B_Handler(void)
 {
 	TIMER4_ICR_R = TIMER_ICR_TBTOCINT; //clear flag
 	switch(button_getButton()){
-	case 1: k--; break;
-	case 2:k++; break;
-	case 3: j--; break;
-	case 4: j++; break;
-	case 5: i--; break;
-	case 6: i++; break;
-	default: break;
+	    case 1: k--; break;
+	    case 2:k++; break;
+	    case 3: j--; break;
+	    case 4: j++; break;
+	    case 5: i--; break;
+	    case 6: i++; break;
+	    default: break;
 	}
+
 }
 
 /// Initialize the timers
@@ -128,9 +134,9 @@ int main(void){
 	    lcd_init();
 	    button_init();
 	    clock_timer_init();
-	    int hours = 12, mins = 59, secs = 55;
+
 	    while(1){
-	                        lcd_printf("%02d:%02d:%02d", (i % 12), (j % 60), (k % 60));
+	         lcd_printf("%02d:%02d:%02d", abs(i % 12) + 1, abs(j % 60), abs(k % 60));
 	   }
 
 	}

@@ -14,7 +14,9 @@
 #include "lcd.h"
 #include "button.h"
 #include "WiFi.h"
+#include "String.h"
 
+    char thePassword[17] = "HelloMyNameIsRob";
 /**
  * @brief sets all necessary registers to enable the uart 1 module.
  */
@@ -78,7 +80,18 @@ int uart_receive(void){
  * @param data pointer to the first index of the string to be sent
  */
 void uart_sendStr(const char *data){
-	//TODO
+
+    int i,j;
+    j = 0;
+    while(j < strlen(data)) {
+
+        uart_sendChar(data[i]);
+        j++;
+
+    }
+
+
+
 }
 
 
@@ -88,7 +101,7 @@ int main(void){
     int i = 0;
     char data = 0;
     lcd_init();
-    WiFi_start(char *password);
+    WiFi_start(&thePassword);
     uart_init();
     button_init();
     //char bstr[100];
